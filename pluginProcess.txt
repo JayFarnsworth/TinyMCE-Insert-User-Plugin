@@ -1,0 +1,72 @@
+TinyMCE - Coding Challenges
+
+--Detailed Steps for Creation of Plugin--
+
+#1: Create a Simple TinyMCE Plugin
+
+ // - Part A: Invoke TinyMCE in a Simple HTML Page.
+
+Created basic HTML document, “example.html.”
+
+Found “Self-hosted Get Started” in the official docs.
+
+In docs, found TinyMCE Cloud url, added it in a <script> tag in <head>.
+
+Created basic HTML body. Created <form> element containing a <textarea> element with an id of “editor”.
+
+TinyMCE Docs provided information on invoking the tinymce.init({}) method. Added another <script> tag in the <head> of example.html. Within the <script> tag, invoked tinymce.init on the <textarea> by selecting its id of “editor” in the object being passed to tinymce.init({}). Full invocation: tinymce.init({ selector: ‘#editor’ })
+
+Since this page was being tested locally, the docs instructed to add ‘https://” to the beginning of the link to the TinyMCE Script in the first <script> tag to read: <script src='https:https://cloud.tinymce.com/stable/tinymce.min.js'></script>
+
+In Terminal, ran “http-server” on tiny.html to test the page on a local server. 
+
+Tested locally hosted page in Chrome. The plugin did not load. Opened Chrome Developer Tools and discovered in the console that the page is throwing an error. The GET request on the TinyMCE Cloud url in the <script> tag in the <head> was not resolving. 
+
+Within the “My Account” section of the TinyMCE website, selected “Key Manager,” and clicked the link to configure the API key. Suspected the problem relates to domain access. Key Manager stated that ‘localhost’ is pre-included. Since this plugin mockup site was using no API key, and an unregistered account, I suspected this rule may also be true for domains unregistered with TinyMCE Cloud. 
+
+Removed additional “https://” from beginning of TinyMCE Cloud Url. Refreshed locally hosted HTML page. The plugin loads with the warning: “This domain is not registered with TinyMCE Cloud.” Suspicion that the docs are incorrect or depreciated was correct.
+(link to page that provided this information)
+
+Default TinyMCE plugin now running on basic HTML page.
+
+
+// - Part B: Add A Custom Dialog Using TinyMCE’s WindowManager.
+
+
+Broke down the customization of the plugin into three pieces:
+
+
+1. Setting editor toolbars and menus to match example including custom button.
+2. Setting the dialog popup behavior. 
+3. Setting dialog fields and look to match example.
+
+
+1) Custom button and toolbar menus
+
+
+Found the editor appearance docs. The plugin’s toolbar items are set with a single string for each row, or an array of strings, for multiple lines. Having only the picture of the expected result as a reference, I went to the fully featured example and noted the names of each toolbar item needed.
+
+Added the toolbar key in my .init function, and grouped toolbar items with pipes between groups following the references structure. Tested and most did not appear. 
+
+Visited toolbar items list in docs again. Of course- many of these tools require a plugin, the only ones appearing currently are included in the core base of TinyMCE. This is done to keep the editor ultralight, and makes perfect sense. 
+
+Added required plugins key to my .init({}) object as referenced in the toolbar controls doc. Toolbars appear as expected.
+
+Add menubar key in .init({}) object. Give it a value of string with menubar items needed. 
+
+“Tools” does not appear in menubar despite adding it in my menubar key’s string. Clicked on menu items- their menus are very feature poor. In fact, they only have plugins I’ve explicitly installed on the editor. Looked into “tools” plugins, added a spellchecker plugin. “Tools” menu appears.
+
+Found an example of a basic custom plugin on StackOverflow. Discovered the setup key, and structure for adding a function to it. Coupled with the knowledge from the “Add Custom Toolbar Button” guide in the docs, added a setup key and an .addButton() method to add the “Insert User Name” button to my toolbar. Also added the button text to my toolbar menu object per the guide.
+
+2) Setting Dialog Popup Behavior
+
+Found the .open() method of the WindowManager docs within the API reference. It’s passed an object much like the .init({}) method. Initially made another HTML file to pass to the url key for the dialog’s content, but upon needing to style and add additional behavior to the HTML, decided I must be overcomplicating the construction. Found a stack overflow example which passes a body key instead of a url. Mimicked this structure. Added an onsubmit key which calls the .insertContent() method with a string imitating the HTML span tag with appropriate class with the data from the body fields inserted. Again, this structure was mimicked from an example I found on Stack.
+
+3) Setting Dialog Look and Fields
+
+The fields are set as objects passed to the dialog’s body key. Gave them labels and names matching reference. The default size of the dialog is quite small, and the reference is much wider than it. I set the width parameter of my WindowManager.open() object to 600 and the height to 100 after some trial and error. In an effort to keep the plugin as minimalistic as possible I did include CSS. With the exception of a slight font-size discrepancy it looks identical to the reference. 
+
+Plugin Exercise: Conclusions
+
+I found the TinyMCE docs to be extensive and helpful, although I needed Stack Overflow examples to give context for some of the docs’ examples. I’m happy with my minimalist plugin, completely contained to one HTML document. I added some comments within the javascript code for clarity of what each part of the plugin is doing. The most difficult issue to overcome was how to generate the content for the dialog popup. I initially provided the url for a local HTML file to it, but found myself writing another CSS file to have it match the example. Searching for an explicit example of a plugin with a dialog helped me find the more minimalist solution to match the theme of the exercise that require little styling. 
+
