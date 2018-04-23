@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+
+  <head>
+
+    <meta charset="utf-8">
+    <title>TinyMCE Test</title>
+    <link rel="stylesheet" href="main.css">
+
+    <script src='https://cloud.tinymce.com/stable/tinymce.min.js'></script>
+      <script>
+        tinymce.init({
+          selector: '#editor',
+          menubar: 'file edit insert view format table tools',
+          plugins: 'print preview emoticons image link media template lists textcolor table spellchecker',
+          toolbar: ['undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify  |  bullist numlist outdent indent | link image', 'fontsizeselect | print preview media | forecolor backcolor emoticons | template | insertUserName'],
+          setup: function (editor) {
+            editor.addButton('insertUserName', {
+              text: 'Insert User Name',
+              onclick: function () {
+                editor.windowManager.open({
+                  title: 'Insert User Name - Custom Dialog',
+                  height: 200,
+                  width: 800,
+                  body: [
+                    { type: 'textbox', name: 'firstname', label: 'First Name:' },
+                    { type: 'textbox', name: 'lastname', label: 'Last Name:' }
+                  ],
+                  onsubmit: function (event) {
+                    // Insert content when the window form is submitted
+                    editor.insertContent('<span class=\'abc\'>' + event.data.firstname + ' ' + event.data.lastname + '</span>');
+                  }
+                })
+              }
+            })
+          }
+        });
+      </script>
+
+  </head>
+
+  <body>
+
+      <form>
+        <textarea id='editor'></textarea>
+      </form>
+
+  </body>
+
+</html>
