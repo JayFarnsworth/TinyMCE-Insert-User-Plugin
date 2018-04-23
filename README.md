@@ -4,3 +4,5 @@ A simple plugin for TinyMCE. Adds "Insert User Name" toolbar button to toolbar m
 Example HTML page with included plugin: example.html
 
 Plugin self-contained in a JavaScript file: plugin.js
+
+Simple text file of plugin development process: pluginProcess.txt
