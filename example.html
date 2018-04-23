@@ -9,19 +9,31 @@
 
     <script src='https://cloud.tinymce.com/stable/tinymce.min.js'></script>
       <script>
+        // Initialize TinyMCE
         tinymce.init({
+
+          // Select DOM Element to run TinyMCE within
           selector: '#editor',
+
           menubar: 'file edit insert view format table tools',
+
           plugins: 'print preview emoticons image link media template lists textcolor table spellchecker',
+
+          // Add insertUserName in the toolbar 
           toolbar: ['undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify  |  bullist numlist outdent indent | link image', 'fontsizeselect | print preview media | forecolor backcolor emoticons | template | insertUserName'],
+          
           setup: function (editor) {
+
+            // add custom button 
             editor.addButton('insertUserName', {
               text: 'Insert User Name',
               onclick: function () {
+                // open dialog when button is clicked
                 editor.windowManager.open({
                   title: 'Insert User Name - Custom Dialog',
-                  height: 200,
-                  width: 800,
+                  width: 700,
+                  height: 100,
+                  // dialog content fields
                   body: [
                     { type: 'textbox', name: 'firstname', label: 'First Name:' },
                     { type: 'textbox', name: 'lastname', label: 'Last Name:' }
@@ -34,6 +46,8 @@
               }
             })
           }
+
+
         });
       </script>
 
@@ -41,8 +55,11 @@
 
   <body>
 
-      <form>
+      <form method='post'>
+
+        <!-- element targed by TinyMCE plugin -->
         <textarea id='editor'></textarea>
+        
       </form>
 
   </body>
